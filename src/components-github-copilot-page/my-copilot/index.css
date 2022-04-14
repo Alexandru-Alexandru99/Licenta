@@ -1,0 +1,197 @@
+.my-copilot-container {
+    background-color: #0d1117;
+    height: 100%;
+}
+
+.my-copilot-container .my-copilot-container-body {
+    height: fit-content;
+    padding-bottom: 90px;
+}
+
+/*
+*   tob-bar
+*/
+
+.my-copilot-container .top-bar {
+    background-color: #181c24;
+    height: 3.5rem;
+    border: 1px solid #30363d;
+    border-radius: 0 0px 30px 30px;
+    margin-right: 10px;
+    margin-left: 100px;
+}
+
+.my-copilot-container .top-bar .logo-container {
+    display: flex;
+    margin-right: 20px;
+    float: right;
+}
+
+.my-copilot-container .top-bar .logo-container .logo-tob-bar {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.my-copilot-container .top-bar .logo-container .logo-name {
+    margin-top: 8px;
+}
+
+/*
+*   options container
+*/
+
+.my-copilot-container .my-copilot-container-body .options-container {
+    display: grid;
+    flex-wrap: wrap;
+    grid-template-columns: auto auto auto;
+    grid-gap: 32px;
+    max-width: 100%;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 20px;
+}
+
+.my-copilot-container .my-copilot-container-body .options-container .option-content {
+    border-radius: 6px;
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    min-width: 0;
+    transition-property: opacity;
+    transition-duration: 0.15s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+    height: auto;
+    background-color: #0d1117;
+}
+
+.my-copilot-container .my-copilot-container-body .options-container .option-content .icon-container {
+    background-size: cover;
+    height: 64px;
+    width: 64px;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+}
+
+.my-copilot-container .my-copilot-container-body .options-container .option-content .icon-container .icon {
+    margin: 16px 16px 16px 16px
+}
+
+.my-copilot-container .my-copilot-container-body .options-container .option-content .right-text {
+    min-width: 0;
+    margin-left: 16px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+}
+
+.my-copilot-container .my-copilot-container-body .options-container .option-content .title {
+    line-height: 24px;
+    font-weight: 700;
+    margin-top: 3px;
+    font-size: 16px;
+    margin-bottom: 2px;
+    display: inline-block;
+    transition: color .15s;
+    color: #8b949e;
+}
+
+.my-copilot-container .my-copilot-container-body .options-container .option-content .description {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #8b949e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*
+*   code container
+*/
+
+.my-copilot-container .my-copilot-container-body .editor-container {
+    margin-left: 180px;
+    margin-right: 130px;
+    margin-top: 20px;
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.my-copilot-container .my-copilot-container-body .editor-container .language-list-container {
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 200px;
+}
+
+.my-copilot-container .my-copilot-container-body .editor-container .code-editor-container {
+    border: 1px solid #30363d;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.my-copilot-container .my-copilot-container-body .editor-container .selection-container {
+    margin-top: 20px;
+    display: flex;
+    margin-left: 20px;
+}
+
+.my-copilot-container .my-copilot-container-body .editor-container .selection-container .list-container {
+    width: 300px;
+    height: fit-content;
+}
+
+.my-copilot-container .my-copilot-container-body .editor-container .line-container {
+    border: 1px solid #30363d;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.my-copilot-container .my-copilot-container-body .editor-container .output-container {
+    border: 1px solid #30363d;
+    background-color: #1e1e1e;
+    margin-top: 20px;
+    height: fit-content;
+    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1024px) {
+    .my-copilot-container .my-copilot-container-body .options-container {
+        display: grid;
+        flex-wrap: wrap;
+        grid-template-columns: auto auto;
+        grid-gap: 32px;
+        max-width: 100%;
+        margin-left: 20%;
+        margin-right: 20%;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 700px) {
+    .my-copilot-container .my-copilot-container-body .options-container {
+        max-width: 100%;
+        display: block;
+        margin-left: 20%;
+        margin-right: 20%;
+        margin-top: 20px;
+    }
+
+    .my-copilot-container .my-copilot-container-body .options-container .option-content {
+        margin-top: 10px;
+    }
+
+    .my-copilot-container .my-copilot-container-body .editor-container .language-list-container {
+        margin-bottom: 20px;
+        margin-left: 20px;
+        margin-top: 20px;
+        width: 80%;
+    }
+}

@@ -1,0 +1,147 @@
+/* Popup style */
+.popup-box {
+    position: fixed;
+    background: #00000050;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+   
+.box {
+    position: relative;
+    width: 50%;
+    margin: 0 auto;
+    height: auto;
+    max-height: 70vh;
+    margin-top: calc(100vh - 85vh - 20px);
+    background: #0d1117;
+    border-radius: 4px;
+    padding: 20px;
+    border: 1px solid #30363d;
+    overflow: auto;
+    color: white;
+}
+   
+.close-icon {
+    content: 'x';
+    cursor: pointer;
+    position: fixed;
+    right: calc(25% - 30px);
+    top: calc(100vh - 85vh - 33px);
+    background: #0d1117;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    line-height: 20px;
+    text-align: center;
+    border: 1px solid #30363d;
+    font-size: 20px;
+    color: #8b949e;
+}
+
+.popup-box .box .line {
+    border: 1px solid #30363d;
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+
+}
+
+.popup-box .box .description-container-text {
+    color: #8b949e;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.popup-box .box .prompt-container-text {
+    line-height: 24px;
+    font-weight: 700;
+    margin-top: 3px;
+    font-size: 16px;
+    margin-bottom: 2px;
+    color: #8b949e;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 10px;
+}
+
+.popup-box .box .prompt-container-code {
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    border-radius: 0px 0px 0px 0px;
+    height: auto;
+    white-space: pre-line;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.popup-box .box .sample-container-text {
+    line-height: 24px;
+    font-weight: 700;
+    margin-top: 3px;
+    font-size: 16px;
+    margin-bottom: 2px;
+    color: #8b949e;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.popup-box .box .sample-container-output {
+    background-color: #6a9e59;
+    border: 1px solid #30363d;
+    border-radius: 0px 0px 0px 0px;
+    height: auto;
+    white-space: pre-line;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.popup-box .box .option-container {
+    border-radius: 6px;
+    display: flex;
+    align-items: flex-start;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 10px;
+}
+
+.popup-box .box .option-container .right-text .description {
+    display: flex;
+    margin-top: 10px;
+}
+
+.popup-box .box .option-container .icon-container {
+    background-color: orange;
+    background-size: cover;
+    height: 64px;
+    width: 64px;
+    border-radius: 6px;
+}
+
+.popup-box .box .option-container .icon-container .icon {
+    margin: 16px 16px 16px 16px
+}
+
+.popup-box .box .option-container .right-text {
+    min-width: 0;
+    margin-left: 16px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+}
+
+.popup-box .box .option-container .title {
+    line-height: 24px;
+    font-weight: 700;
+    margin-top: 3px;
+    font-size: 16px;
+    margin-bottom: 2px;
+    display: inline-block;
+    transition: color .15s;
+    color: #8b949e;
+}

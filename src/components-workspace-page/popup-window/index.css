@@ -1,0 +1,93 @@
+/* Popup style */
+.change-credentials-popup-box {
+    position: fixed;
+    background: #00000050;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+   
+.change-credentials-popup-box .change-credentials-box {
+    position: relative;
+    width: 30%;
+    margin: 0 auto;
+    height: auto;
+    max-height: 70vh;
+    margin-top: calc(100vh - 85vh - 20px);
+    background: #181c24;
+    border-radius: 4px;
+    padding: 20px;
+    border: 1px solid #30363d;
+    overflow: auto;
+    color: white;
+}
+   
+.change-credentials-close-icon {
+    content: 'x';
+    cursor: pointer;
+    position: fixed;
+    right: calc(32% - 5px);
+    top: calc(100vh - 85vh - 33px);
+    background: #181c24;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    line-height: 20px;
+    text-align: center;
+    border: 1px solid #30363d;
+    font-size: 20px;
+    color: #8b949e;
+}
+
+.change-credentials-popup-box .change-credentials-box .option-container {
+    border-radius: 6px;
+    text-align: center;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 10px;
+}
+
+.change-credentials-popup-box .change-credentials-box .option-container .text-container {
+    display: inline-block;
+    vertical-align: middle; 
+    width: fit-content;
+}
+
+.change-credentials-popup-box .change-credentials-box .option-container .text-container .line {
+    border: 1px solid #30363d;
+    margin-top: 10px;
+    margin-left: -50px;
+    margin-right: -50px;
+}
+
+.change-credentials-popup-box .change-credentials-box .option-container .text-container .option-title-text {
+    color: #8b949e;
+    font-size: 24px;
+}
+
+.change-credentials-popup-box .change-credentials-box .option-container .text-container .user-info-container {
+    display: flex;
+}
+
+.change-credentials-popup-box .change-credentials-box .option-container .text-container .user-info-container .source-parentbox {
+    height: 35.97px;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+    
+    text-align: center;  
+    font: 0/0 a;        
+}
+
+.change-credentials-popup-box .change-credentials-box .option-container .text-container .user-info-container .source-parentbox:before {      
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle; 
+    height: 100%;
+}
+
+.change-credentials-popup-box .change-credentials-box .option-container .text-container .user-info-container .source-childbox {
+    display: inline-block;
+    vertical-align: middle;          
+    font: 13px/1 Arial, sans-serif;  
+}

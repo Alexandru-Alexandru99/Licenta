@@ -1,0 +1,16 @@
+{
+	"name": "check-security-image",
+	"version": "1.0.0",
+	"description": "Check security image",
+	"author": "hackins",
+	"main": "index.js",
+	"license": "ISC",
+	"keywords": [
+		"nodejs",
+		"express",
+		"bootstrap"
+	],
+	"dependencies": {
+		"express": "^4.17.1"
+	}
+}

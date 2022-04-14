@@ -1,0 +1,141 @@
+.wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.lm-new {
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+    background: #0d1117;
+    color: #fff;
+    transition: all 0.1s;
+    margin-left: -200px;
+}
+
+.lm {
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+    background: #0d1117;
+    color: #fff;
+    transition: all 0.1s;
+    margin-left: 0px;
+}
+
+
+h3 {
+    margin-left: 40px;
+}
+
+.logoDash {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    /* background: url("../../img/cosmonautDash.png"); */
+}
+
+.sidebar-header {
+    padding: 10px;
+    padding-left: 15px;
+    background:  rgba(22,27,34,255);
+}
+
+ul.components {
+    border-bottom: 1px solid #0d1117;
+}
+
+ul p {
+    font-size: 15px;
+    font-family:monospace;
+    font-weight: 700;
+    color: #d8dbe0;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-bottom: 0px;
+}
+
+ul li a {
+    color: #fff;
+    padding: 20px;
+    padding-left: 15px;
+    font-size: 15px;
+    display: block;
+}
+
+.wrapper ul li:hover a{
+    color: #fff;
+    padding-left: 50px;
+    transition: 1s;
+}
+
+@media (min-width: 768px) {
+    .lm-new-min {
+        width: 200px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 999;
+        background: #0d1117;
+        color: #fff;
+        transition: all 0.1s;
+        margin-left: -200px;
+        margin-top: 0px;
+    }
+
+    .lm-min {
+        width: 200px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 999;
+        background: #0d1117;
+        color: #fff;
+        transition: all 0.1s;
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+}
+
+@media (max-width: 768px) {
+    .lm {
+        margin-left: -200px;
+    }
+    
+    .lm-new-min {
+        width: 200px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 999;
+        background: #0d1117;
+        color: #fff;
+        opacity: 1;
+        transition: all 0.1s;
+        margin-left: -200px;
+        margin-top: -61px;
+    }
+
+    .lm-min {
+        width: 200px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 88vh;
+        z-index: 999;
+        background: #0d1117;
+        color: #fff;
+        transition: all 0.1s;
+        margin-left: 0px;
+        margin-top: 61px;
+    }
+}

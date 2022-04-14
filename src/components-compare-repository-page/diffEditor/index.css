@@ -1,0 +1,357 @@
+.content-cr-body {
+    background-color: #0d1117;
+    height: 100vh;
+}
+
+.content-cr-body .content-cr {
+    background-color: #0d1117;
+    height: auto;
+}
+
+/*
+*   tob-bar
+*/
+
+.content-cr-body .top-bar {
+    background-color: #181c24;
+    height: 3.5rem;
+    border: 1px solid #30363d;
+    border-radius: 0 0px 30px 30px;
+    margin-right: 10px;
+    margin-left: 100px;
+}
+
+.content-cr-body .top-bar .logo-container {
+    display: flex;
+    margin-right: 20px;
+    float: right;
+}
+
+.content-cr-body .top-bar .logo-container .logo-tob-bar {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.content-cr-body .top-bar .logo-container .logo-name {
+    margin-top: 8px;
+}
+
+/*
+*
+*/
+
+.content-cr-body .content-cr .repo-type-container {
+    display: flex;
+}
+
+.content-cr-body .content-cr .write-repository .informations {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: -10px;
+}
+
+.content-cr-body .content-cr .write-repository {
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+    margin-bottom: 20px;
+    margin-left: 180px;
+    margin-right: 130px;
+    margin-top: 30px;
+}
+
+.content-cr-body .content-cr .write-repository .manipulation {
+    display: flex;
+}
+
+.content-cr-body .content-cr .write-repository .manipulation .source-container {
+    display: flex;
+    margin-left: 10px;
+}
+
+.content-cr-body .content-cr .write-repository .manipulation .target-container {
+    display: flex;
+}
+
+/*
+*
+*/
+
+.content-cr .content-cr-work {
+    display: block;
+    margin-left: 180px;
+    margin-right: 130px;
+    margin-top: 30px;
+    padding-bottom: 100px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files {
+    width: auto;
+    height: auto;
+    padding-bottom: 20px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-1 {
+    height: 50%;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-1 .chart-container-1-1 {
+    width: 50%;
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+    margin-right: 5px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-1 .chart-container-1-2 {
+    width: 50%;
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-2 {
+    height: 50%;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-2 .chart-container-2-1 {
+    width: 50%;
+    background-color: #18141c;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+    margin-right: 5px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-2 .chart-container-2-2 {
+    border: 1px solid #30363d;
+    background-color: #18141c;
+    border-radius: 5px 5px 5px 5px;
+    width: 50%;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-3-1 {
+    display: flex;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-3 .chart-container-3-1 .chart-container-3-1-1 {
+    width: 50%;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+    margin-right: 5px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-3 .chart-container-3-1 .chart-container-3-1-2 {
+    width: 50%;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-4 {
+    height: 50%;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-4 .chart-container-4-1 {
+    width: 50%;
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+    margin-right: 5px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-4 .chart-container-4-2 {
+    width: 50%;
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.content-cr .content-cr-work .content-cr-diff-editor {
+    width: auto;
+    border: 1px solid #30363d;
+}
+
+/*
+*   list of files charts
+*/
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-3 .chart-container-file-list{
+    margin-bottom: 20px;
+    display:flex;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-3 .chart-container-file-list .chart-container-file-list-1{
+    width: 50%;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    margin-right: 20px;
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .chart-container-3 .chart-container-file-list .chart-container-file-list-2{
+    width: 50%;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+}
+
+/*
+*   list of files for both commits
+*/
+
+.content-cr-body .content-cr .content-cr-work .select-file-repository {
+    margin-bottom: 20px;
+    display:flex;
+}
+
+.content-cr-body .content-cr .content-cr-work .first-list{
+    width: 48.5%;
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    margin-right: 20px;
+}
+
+.content-cr-body .content-cr .content-cr-work .second-list {
+    width: 51.5%;
+    background-color: #181c24;
+    border: 1px solid #30363d;
+}
+
+.write-commits {
+    display:flex;
+}
+
+.write-commits .source-container {
+    display: flex;
+}
+
+.write-commits .target-container {
+    display: flex;
+}
+
+.source-parentbox {
+    margin-top: 9px;
+    height: 35.97px;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+    
+    text-align: center;  /* align the inline(-block) elements horizontally */
+    font: 0/0 a;         /* remove the gap between inline(-block) elements */
+}
+
+.source-parentbox:before {      /* create a full-height inline block pseudo-element */
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle; /* vertical alignment of the inline element */
+    height: 100%;
+}
+
+.source-childbox {
+    display: inline-block;
+    vertical-align: middle;          /* vertical alignment of the inline element */
+    font: 13px/1 Arial, sans-serif;  /* reset the font property */
+    
+    padding: 5px;
+}
+
+.target-parentbox {
+    margin-left: 50px;
+    margin-top: 9px;
+    height: 35.97px;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+    
+    text-align: center;  /* align the inline(-block) elements horizontally */
+    font: 0/0 a;         /* remove the gap between inline(-block) elements */
+}
+
+.target-parentbox:before {      /* create a full-height inline block pseudo-element */
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle; /* vertical alignment of the inline element */
+    height: 100%;
+}
+
+.target-childbox {
+    display: inline-block;
+    vertical-align: middle;          /* vertical alignment of the inline element */
+    font: 13px/1 Arial, sans-serif;  /* reset the font property */
+    
+    padding: 5px;
+}
+
+/*
+*   loading container
+*/
+
+.content-cr .content-cr-work .content-cr-choose-files .loading-container {
+    height: auto;
+    height: 60vh;
+    text-align: center;
+    border: 1px solid #30363d;
+    border-radius: 5px 5px 5px 5px;
+    background-color: #0d1117;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.content-cr .content-cr-work .content-cr-choose-files .loading-container .image {
+    animation: rotation 2s infinite linear;
+    top: 50%;
+    margin-top: 14%;
+}
+
+@media (max-width: 1024px) {
+    .content-cr-body .content-cr .write-repository .manipulation {
+        flex-direction: column;
+    }
+
+    #repository-input-two {
+        margin-top: 10px;
+    }
+
+    #repository-input-one {
+        margin-top: 10px;
+    }
+
+    #link-compare-button {
+        margin-left: 10px;
+    }
+
+    .content-cr-body .content-cr .write-repository .manipulation .target-container {
+        display: flex;
+        margin-left: -40px;
+    }
+
+    .write-commits {
+        flex-direction: column;
+    }
+    
+    #commits-compare-button {
+        margin-left: 0px;
+    }
+    
+    .write-commits .target-container {
+        margin-left: -50px;
+    }
+
+    #sha-input-one {
+        margin-top: 10px;
+    }
+
+    #sha-input-two {
+        margin-top: 10px;
+    }
+}

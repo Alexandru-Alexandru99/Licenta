@@ -1,0 +1,50 @@
+[
+   {
+      "name": "python",
+      "extension": "py"
+   },
+   {
+      "name": "c++",
+      "extension": "cpp"
+   },
+   {
+      "name": "json",
+      "extension": "json"
+   },
+   {
+      "name": "c",
+      "extension": "c"
+   },
+   {
+      "name": "javascript",
+      "extension": "js"
+   },
+   {
+      "name": "powershell",
+      "extension": "sh"
+   },
+   {
+      "name": "c#",
+      "extension": "cs"
+   },
+   {
+      "name": "json",
+      "extension": "json"
+   },
+   {
+      "name": "typescript",
+      "extension": "ts"
+   },
+   {
+      "name": "html",
+      "extension": "html"
+   },
+   {
+      "name": "css",
+      "extension": "css"
+   },
+   {
+      "name": "java",
+      "extension": "java"
+   }
+]
