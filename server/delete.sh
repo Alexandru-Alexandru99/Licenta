@@ -3,6 +3,6 @@
 echo "Start delete..."
 timestamp=`date +%Y-%m-%d_%H:%M:%S`
 echo "delete $timestamp" > ./logs/delete.log
-rm -rf ./repos/*
-rm -rf ./code/*
+rm -rf ./server/repos/*
+rm -rf ./server/code/*
 echo "Delete finished..."

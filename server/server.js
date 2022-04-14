@@ -26,23 +26,23 @@ app.use('/compare', compareRouter);
 app.use('/code', codeRouter);
 app.use('/copilot', copilotRouter);
 
-// const yourscript = exec('sh ./server/init.sh',
-//   (error, stdout, stderr) => {
-//     if (error !== null) {
-//       console.log(`exec error: ${error}`);
-//     }
-//   });
+const yourscript = exec('sh ./server/init.sh',
+  (error, stdout, stderr) => {
+    if (error !== null) {
+      console.log(`exec error: ${error}`);
+    }
+  });
 
-// cron.schedule('59 23 * * *', function () {
-//   const yourscript = exec('sh ./server/delete.sh',
-//     (error, stdout, stderr) => {
-//       console.log(stdout);
-//       console.log(stderr);
-//       if (error !== null) {
-//         console.log(`exec error: ${error}`);
-//       }
-//     });
-// });
+cron.schedule('59 23 * * *', function () {
+  const yourscript = exec('sh ./server/delete.sh',
+    (error, stdout, stderr) => {
+      console.log(stdout);
+      console.log(stderr);
+      if (error !== null) {
+        console.log(`exec error: ${error}`);
+      }
+    });
+});
 
 app.listen(port, (err) => {
   if (err) return console.log(err);

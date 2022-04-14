@@ -7,11 +7,11 @@ function create_dir() {
         echo "making dir $deployDir"
         mkdir -p "$1"
         if [ "$1" = "./logs" ]; then
-            touch ./logs/delete.log
+            touch ./server/logs/delete.log
         fi
     fi
 }
 
-create_dir ./repos
-create_dir ./code
-create_dir ./logs
+create_dir ./server/repos
+create_dir ./server/code
+create_dir ./server/logs
