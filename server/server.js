@@ -4,6 +4,7 @@ const app = express();
 const port = process.env.port || 8080;
 const { exec } = require('child_process');
 const cron = require('node-cron');
+const path = require('path');
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, "../build")));
