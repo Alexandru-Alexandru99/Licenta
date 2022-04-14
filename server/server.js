@@ -6,7 +6,7 @@ const { exec } = require('child_process');
 const cron = require('node-cron');
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('build'));
+  app.use(express.static(path.join(__dirname, "../build")));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
   });
@@ -25,7 +25,7 @@ app.use('/compare', compareRouter);
 app.use('/code', codeRouter);
 app.use('/copilot', copilotRouter);
 
-const yourscript = exec('sh init.sh',
+const yourscript = exec('sh ./server/init.sh',
   (error, stdout, stderr) => {
     if (error !== null) {
       console.log(`exec error: ${error}`);
@@ -33,7 +33,7 @@ const yourscript = exec('sh init.sh',
   });
 
 cron.schedule('59 23 * * *', function () {
-  const yourscript = exec('sh delete.sh',
+  const yourscript = exec('sh ./server/delete.sh',
     (error, stdout, stderr) => {
       console.log(stdout);
       console.log(stderr);
