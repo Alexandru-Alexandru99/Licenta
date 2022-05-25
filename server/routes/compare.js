@@ -301,7 +301,7 @@ router.post('/languages', (req, res) => {
         });
 
     }).catch(function (e) {
-        console.log("Error get all files...");
+        console.log("Error get languages...");
         res.json("Error");
     });
 });
@@ -446,11 +446,11 @@ router.post('/files', (req, res) => {
 });
 
 /*
-*   get all code for a specific file
+*   get lines by every commit
 */
 
 router.post('/lines', (req, res) => {
-    console.log("Start get filecode...");
+    console.log("Start get lines...");
     const sha_list = req.body.list;
     const my_file = req.body.file;
     const storage = req.body.storage;
@@ -495,7 +495,7 @@ router.post('/lines', (req, res) => {
                 })
             })
     }).catch(function (e) {
-        console.log("Error get file code...");
+        console.log("Error get lines...");
         res.json("Error");
     });
 
@@ -527,14 +527,14 @@ router.post('/lines', (req, res) => {
             }
         }
 
-        console.log("Done get file code...");
+        console.log("Done get lines...");
         res.json({
             changes:all,
             date: dates
         });
 
     }).catch(function (e) {
-        console.log("Error get file code...");
+        console.log("Error get lines...");
         res.json("Error");
     });
 });

@@ -8,6 +8,8 @@ import Copilot from "../../images/copilot.svg";
 import Workspace from "../../images/workspace.svg";
 import Security from "../../images/security.svg";
 import Information from "../../images/information.svg";
+import Moss from "../../images/succulent.png";
+import Multiple from "../../images/gitlab.png";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
@@ -53,8 +55,9 @@ const Button = styled.button`
 const SidebarContainer = styled.div`
   background-color: #181c24;
   width: 3.5rem;
-  height: 80vh;
+  height: 85vh;
   margin-top: 50px;
+  margin-bottom: 10px;
   border-radius: 0 30px 30px 0;
   padding: 1rem 0;
   display: flex;
@@ -82,7 +85,7 @@ const SlickBar = styled.ul`
   background-color: #181c24;
   padding: 2rem 0;
   position: absolute;
-  top: 12rem;
+  top: 11rem;
   left: 0;
   width: ${(props) => (props.clicked ? "10rem" : "3.5rem")};
   transition: all 0.5s ease;
@@ -168,6 +171,22 @@ const Sidebar = () => {
           >
             <img src={Copilot} alt="Copilot" />
             <Text clicked={click}>Copilot</Text>
+          </Item>
+          <Item
+            onClick={() => setClick(false)}
+            activeClassName="active"
+            to="/moss"
+          >
+            <img src={Moss} alt="Moss" />
+            <Text clicked={click}>Moss</Text>
+          </Item>
+          <Item
+            onClick={() => setClick(false)}
+            activeClassName="active"
+            to="/compare-multiple"
+          >
+            <img src={Multiple} alt="Moss" />
+            <Text clicked={click}>Multiple</Text>
           </Item>
           <Item
             onClick={() => setClick(false)}

@@ -30,6 +30,8 @@ import Select from 'react-select'
 
 import Checkbox from '@mui/material/Checkbox';
 
+import FunctionViewEditor from "../function-view-editor";
+
 import programming_languages from "../my-editor/Programming_Languages_Extensions.json";
 
 const crypto = require('crypto');
@@ -108,68 +110,72 @@ export default function CodeEditor() {
     }
 
     useEffect(() => {
-        const name = crypto.randomBytes(20).toString('hex');
-        localStorage.setItem('repositoryName', name);
+        const link = localStorage.getItem('githublink');
 
-        const userName = localStorage.getItem('username');
-        const token = localStorage.getItem('token');
+        if (link !== null) {
+            const name = crypto.randomBytes(20).toString('hex');
+            localStorage.setItem('repositoryName', name);
 
-        axios.post("http://localhost:8080/workspace/commits", {
-            link: localStorage.getItem('githublink'),
-            storage: name,
-            userName: userName !== null ? userName : "",
-            token: token !== null ? token : ""
-        })
-            .then((response) => {
-                if (response.data === "Error") {
-                    alertProperties(true, "error", "Error", "Some error occured while trying to get all commits!");
-                } else {
-                    setCommits(response.data);
-                    alertProperties(true, "success", "Success", "Successfully operation for cloning the repository!");
-                    axios.all([
-                        axios.post("http://localhost:8080/workspace/files", {
-                            storage: name
-                        }),
-                        axios.post("http://localhost:8080/workspace/branches", {
-                            storage: name
-                        }),
-                        axios.post("http://localhost:8080/workspace/commitsbyday", {
-                            storage: name
-                        })
-                        ,
-                        axios.post("http://localhost:8080/workspace/languages", {
-                            storage: name
-                        })
-                    ])
-                        .then(axios.spread((response1, response2, response3, response4) => {
-                            if (response1.data === "Error") {
-                                alertProperties(true, "error", "Error", "Some error occured while trying to get all files!");
-                            } else {
-                                alertProperties(true, "success", "Success", "Successfully operation for getting all files!");
-                                setFiles(response1.data);
-                            }
-                            if (response2.data === "Error") {
-                                alertProperties(true, "error", "Error", "Some error occured while trying to get all branches!");
-                            } else {
-                                alertProperties(true, "success", "Success", "Successfully operation for getting all branches!");
-                                setBranches(response2.data);
-                            }
-                            if (response3.data === "Error") {
-                                alertProperties(true, "error", "Error", "Some error occured while trying to get chart informations!");
-                            } else {
-                                setDate(response3.data.data);
-                                setNumberOfCommits(response3.data.total_per_day);
-                            }
-                            if (response4.data === "Error") {
-                                alertProperties(true, "error", "Error", "Some error occured while trying to get chart language informations!");
-                            } else {
-                                setSizeLanguage(response4.data.size);
-                                setLanguageChart(response4.data.language);
-                                setTotalSize(response4.data.total);
-                            }
-                        }));
-                }
-            });
+            const userName = localStorage.getItem('username');
+            const token = localStorage.getItem('token');
+
+            axios.post("http://localhost:8080/workspace/commits", {
+                link: localStorage.getItem('githublink'),
+                storage: name,
+                userName: userName !== null ? userName : "",
+                token: token !== null ? token : ""
+            })
+                .then((response) => {
+                    if (response.data === "Error") {
+                        alertProperties(true, "error", "Error", "Some error occured while trying to get all commits!");
+                    } else {
+                        setCommits(response.data);
+                        alertProperties(true, "success", "Success", "Successfully operation for cloning the repository!");
+                        axios.all([
+                            axios.post("http://localhost:8080/workspace/files", {
+                                storage: name
+                            }),
+                            axios.post("http://localhost:8080/workspace/branches", {
+                                storage: name
+                            }),
+                            axios.post("http://localhost:8080/workspace/commitsbyday", {
+                                storage: name
+                            })
+                            ,
+                            axios.post("http://localhost:8080/workspace/languages", {
+                                storage: name
+                            })
+                        ])
+                            .then(axios.spread((response1, response2, response3, response4) => {
+                                if (response1.data === "Error") {
+                                    alertProperties(true, "error", "Error", "Some error occured while trying to get all files!");
+                                } else {
+                                    alertProperties(true, "success", "Success", "Successfully operation for getting all files!");
+                                    setFiles(response1.data);
+                                }
+                                if (response2.data === "Error") {
+                                    alertProperties(true, "error", "Error", "Some error occured while trying to get all branches!");
+                                } else {
+                                    alertProperties(true, "success", "Success", "Successfully operation for getting all branches!");
+                                    setBranches(response2.data);
+                                }
+                                if (response3.data === "Error") {
+                                    alertProperties(true, "error", "Error", "Some error occured while trying to get chart informations!");
+                                } else {
+                                    setDate(response3.data.data);
+                                    setNumberOfCommits(response3.data.total_per_day);
+                                }
+                                if (response4.data === "Error") {
+                                    alertProperties(true, "error", "Error", "Some error occured while trying to get chart language informations!");
+                                } else {
+                                    setSizeLanguage(response4.data.size);
+                                    setLanguageChart(response4.data.language);
+                                    setTotalSize(response4.data.total);
+                                }
+                            }));
+                    }
+                });
+        }
     }, []);
 
     const customStyles = {
@@ -444,6 +450,19 @@ export default function CodeEditor() {
         setChecked(e.target.checked);
     }
 
+    const renderFunctionViewEditor = () => {
+        if (commitsCode.length != 0) {
+            return (
+                // <FunctionViewEditor playButtonPressed={checkPlaying} currentBranch={currentBranch} currentFile={currentFile} commitsCode={commitsCode} language={language} extension={fileExt} defaultSliderValue={value} onSelectItem={onSelect} ></FunctionViewEditor>
+                <FunctionViewEditor props={commitsCode} playButtonPressed={checkPlaying} currentBranch={currentBranch} currentFile={currentFile} language={language} extension={fileExt} defaultSliderValue={value} onSelectItem={onSelect}></FunctionViewEditor>
+            )
+        } else {
+            return (
+                <div></div>
+            )
+        }
+    }
+
     return (
         <>
             <Sidebar style={{ position: 'absolute' }}></Sidebar>
@@ -533,11 +552,19 @@ export default function CodeEditor() {
                         </Alert>
                     </Snackbar>
                     {commitsCode.length ?
-                        <MyEditor totalSize={totalSize} sizeLanguage={sizeLanguage} languagesChart={languageChart} playButtonPressed={checkPlaying} currentBranch={currentBranch} currentFile={currentFile} commitsCode={commitsCode} language={language} extension={fileExt} defaultSliderValue={value} onSelectItem={onSelect}></MyEditor>
+                        <>
+                            <MyEditor totalSize={totalSize} sizeLanguage={sizeLanguage} languagesChart={languageChart} playButtonPressed={checkPlaying} currentBranch={currentBranch} currentFile={currentFile} commitsCode={commitsCode} language={language} extension={fileExt} defaultSliderValue={value} onSelectItem={onSelect}></MyEditor>
+                            {/* <FunctionViewEditor playButtonPressed={checkPlaying} currentBranch={currentBranch} currentFile={currentFile} commitsCode={commitsCode} language={language} extension={fileExt} defaultSliderValue={value} onSelectItem={onSelect} ></FunctionViewEditor> */}
+                        </>
                         :
                         <div className='content-loading'>
                             <img className='image' style={{ width: "64px" }} src={loading} alt="loading" />
                         </div>}
+                    {commitsCode.length ?
+                        <FunctionViewEditor props={commitsCode} playButtonPressed={checkPlaying} currentBranch={currentBranch} currentFile={currentFile} language={language} extension={fileExt} defaultSliderValue={value} onSelectItem={onSelect}></FunctionViewEditor>
+                        :
+                        <></>
+                    }
                 </div>
             </div>
         </>

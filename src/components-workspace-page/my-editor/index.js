@@ -3,6 +3,8 @@ import { Form } from "react-bootstrap"
 import "./index.css"
 import 'rc-slider/assets/index.css';
 
+import { DiffEditor as MonacoDiffEditor } from '@monaco-editor/react';
+
 import PlayPause from "../play-stop-button/index";
 import Popup from "../popup-window/index";
 
@@ -24,6 +26,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Chart from 'react-apexcharts'
 
 import loading from "../../images/refresh.png";
+import FunctionViewEditor from "../function-view-editor";
 
 var gitDiff = require('git-diff')
 
@@ -180,6 +183,12 @@ export default function MyEditor({ totalSize, sizeLanguage, languagesChart, play
     function handleEditorChange(value, event) {
         editorRef.current = value;
         div_code_value[currentDivEditor] = value;
+    }
+
+    function handleEditorChangeDiffEditor(value, event) {
+        // editorRef.current = value;
+        // div_code_value[currentDivEditor] = value;
+        console.log(value);
     }
 
     function handleCommit() {

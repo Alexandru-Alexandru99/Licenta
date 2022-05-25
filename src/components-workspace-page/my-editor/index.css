@@ -41,7 +41,6 @@
     margin-top: 30px;
     margin-left: 180px;
     margin-right: 130px;
-    padding-bottom: 40px;
 }
 
 .code-information-container .run-code-container {
@@ -143,7 +142,7 @@
 }
 
 .workspace-content-container .workspace-content .video-content .slider-container .icon-verified {
-    background-image: url("../../images/check.png");
+    background-image: url("../../images/correct.png");
     width: 32px;
     height: 32px;
     display: inline-block;

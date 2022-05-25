@@ -1,0 +1,95 @@
+.my-body-function-compare-editor-container {
+    display: flex;
+    height: fit-content;
+    margin-top: 30px;
+    margin-left: 180px;
+    margin-right: 130px;
+}
+
+.code-to-compare-container {
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    border-radius: 10px 10px 10px 10px;
+    width: 30%;
+    margin-right: 30px;
+}
+
+.code-to-compare-container .set-code-button-container {
+    display: flex;
+}
+
+.code-to-compare-container .set-code-editor-container {
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    position: relative;
+    height: 530px;
+}
+
+.function-compare-editor-container {
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    width: 70%;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.function-compare-editor-container .view-container {
+    position: relative;
+    height: 570px;
+    border-bottom: 1px solid #30363d;
+}
+
+.function-compare-editor-container .controls-container {
+    display: flex;
+    position: relative;
+}
+
+.function-compare-editor-container .controls-container .slider-container {
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+    padding: 0px;
+    position: relative;
+    margin-top: 5px;
+}
+
+.item-content-function { 
+    position: relative; top: 0; left: 0; 
+    width: 100%;
+    display: none;
+}
+
+#index_editor_function0 {
+    position: relative; top: 0; left: 0;
+    height: 100%;
+    width: 100%;
+    display: block;
+}
+
+/*
+*   loading container properties
+*/
+
+.function-compare-editor-container .view-container .start-item-content .loading-container {
+    height: 570px;
+    display: flex;
+    justify-content: center;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.function-compare-editor-container .view-container .start-item-content .image {
+    animation: rotation 2s infinite linear;
+    display: block;
+    margin: auto;
+}

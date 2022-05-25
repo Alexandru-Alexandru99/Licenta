@@ -1255,7 +1255,7 @@ export default function MyDiffEditor() {
                 <div className='write-repository'>
                     <div className='informations'>
                         <p style={{ color: "#8b949e" }}>
-                            Write link of 2 repository for compare operation.
+                            Write link of 2 repository for compare operation:
                         </p>
                     </div>
                     <div className='repo-type-container'>

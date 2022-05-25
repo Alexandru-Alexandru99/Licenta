@@ -1,0 +1,147 @@
+.moss-body {
+    background-color: #0d1117;
+    resize: vertical;
+    overflow: auto;
+    height: 100vh;
+}
+
+.moss-body .moss-container {
+    margin-left: 180px;
+    margin-right: 130px;
+    margin-top: 40px;
+    height: 100%;
+}
+
+.moss-body .moss-container .moss-loading {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.moss-body .moss-container .moss-loading .image {
+    animation: rotation 2s infinite linear;
+}
+
+/*
+*   tob-bar
+*/
+
+.moss-body .top-bar {
+    background-color: #181c24;
+    height: 3.5rem;
+    border: 1px solid #30363d;
+    border-radius: 0 0px 30px 30px;
+    margin-right: 10px;
+    margin-left: 100px;
+}
+
+.moss-body .top-bar .logo-container {
+    display: flex;
+    margin-right: 20px;
+    float: right;
+}
+
+.moss-body .top-bar .logo-container .logo-tob-bar {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.moss-body .top-bar .logo-container .logo-name {
+    margin-top: 8px;
+}
+
+.moss-body .moss-container .moss-container-clone-repository {
+    border: 1px solid #30363d;
+    background-color: #181c24;
+    border-radius: 10px 10px 10px 10px;
+    margin-bottom: 20px;
+}
+
+.moss-body .moss-container .moss-container-clone-repository .input-github-link {
+    display: flex;
+    margin-left: 10px;
+}
+
+.moss-body .moss-container .moss-container-clone-repository .informations {
+    display: flex;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: -10px;
+}
+
+.moss-body .moss-container .moss-container-clone-repository .lists .informations {
+    display: flex;
+}
+
+.moss-body .moss-container .moss-container-clone-repository .lists .select-file {
+    display: flex;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.moss-body .moss-container .moss-container-clone-repository .informations-hash-list {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: -10px;
+}
+
+.moss-body .moss-container .moss-container-clone-repository .select-hash {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.moss-body .moss-container .repo-type-container {
+    display: flex;
+}
+
+.moss-body .moss-container .output-container {
+    border: 1px solid #30363d;
+    background-color: #181c24;
+    border-radius: 10px 10px 10px 10px;
+    margin-bottom: 20px;
+}
+
+.moss-body .moss-container .output-container .output-container-table {
+    background-color: #181c24;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.moss-body .moss-container .compare-container .select-file-repository {
+    display: flex;
+    border: 1px solid #30363d;
+    background-color: #181c24;
+    border-radius: 10px 10px 10px 10px;
+    margin-bottom: 20px;
+}
+
+.moss-body .moss-container .compare-container .select-file-repository .first-list {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.moss-body .moss-container .compare-container .select-file-repository .second-list {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.moss-body .moss-container .compare-container .diff-editor {
+    border: 1px solid #30363d;
+    margin-bottom: 20px;
+}

@@ -20,11 +20,17 @@ const workspaceRouter = require('./routes/workspace');
 const compareRouter = require('./routes/compare');
 const codeRouter = require('./routes/code');
 const copilotRouter = require('./routes/copilot');
+const mossRouter = require('./routes/moss');
+const androidRouter = require('./routes/android');
+const compareMultipleRouter = require('./routes/compare-multiple');
 
 app.use('/workspace', workspaceRouter);
 app.use('/compare', compareRouter);
 app.use('/code', codeRouter);
 app.use('/copilot', copilotRouter);
+app.use('/moss', mossRouter);
+app.use('/android', androidRouter);
+app.use('/compare-multiple', compareMultipleRouter);
 
 const yourscript = exec('sh ./server/init.sh',
   (error, stdout, stderr) => {

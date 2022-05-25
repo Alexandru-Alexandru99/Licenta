@@ -28,6 +28,7 @@
     "git-diff": "^2.0.6",
     "js-git": "^0.7.8",
     "monaco-editor": "^0.31.0",
+    "multer": "^1.4.4",
     "node-cron": "^3.0.0",
     "nodegit": "^0.27.0",
     "nodemon": "^2.0.15",
@@ -60,10 +61,12 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "node ./server/server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "cd server && node server",
+    "app": "start npm run start && start npm run server"
   },
   "eslintConfig": {
     "extends": [
