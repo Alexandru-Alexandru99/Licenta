@@ -20,11 +20,20 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+
 import { alpha, styled } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
 
 import Button from '@mui/material/Button';
 
 const crypto = require('crypto');
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function createData(reponame, commits, commits_per_month, changes, changes_per_commit, changes_per_month) {
   return {
@@ -103,6 +112,12 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Changes per month',
+  },
+  {
+    id: 'grade',
+    numeric: true,
+    disablePadding: false,
+    label: 'Grade',
   },
 ];
 
@@ -187,6 +202,8 @@ export default function MyCompare() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [grade, setGrade] = React.useState('0');
 
   const [repos, setRepos] = React.useState([]);
 
@@ -280,7 +297,59 @@ export default function MyCompare() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const RetrainButton = styled(Button)(({ theme }) => ({
+    textTransform: 'none',
+    fontSize: 14,
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    width: '80px',
+    height: '25px',
+    marginLeft: '10px',
+    marginTop: '10px',
+    lineHeight: 1.5,
+    backgroundColor: 'green',
+    color: "white",
+    '&:hover': {
+      backgroundColor: '#2ea043',
+    },
+  }));
 
+  const GetGradeButton = styled(Button)(({ theme }) => ({
+    textTransform: 'none',
+    fontSize: 14,
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    width: '90px',
+    height: '25px',
+    marginLeft: '10px',
+    marginTop: '10px',
+    lineHeight: 1.5,
+    backgroundColor: 'green',
+    color: "white",
+    '&:hover': {
+      backgroundColor: '#2ea043',
+    },
+  }));
 
   const GetDataButton = styled(Button)(({ theme }) => ({
     textTransform: 'none',
@@ -408,11 +477,147 @@ export default function MyCompare() {
               }
               table_data.push(createData(repos[i], number_commits, parseInt(number_commits_per_month), number_changes, parseInt(number_changes_per_commit), parseInt(number_changes_per_month)));
             }
-            setRows(table_data);
+            console.log(table_data);
+            axios.post("http://localhost:8080/compare-multiple/grades", {
+              repos: table_data
+            })
+              .then(res => {
+                if (res.data === "Error") {
+                  alertProperties(true, "error", "Error", "Some error occured while trying to get grades!");
+                } else {
+                  setRows(res.data);
+                }
+              })
           }
         }
       }));
   }
+
+  const handleRetrain = () => {
+    axios.post("http://localhost:8080/compare-multiple/retrain", {
+      data: rows
+    })
+      .then(res => {
+        alertProperties(true, "success", "Success", "Model retrained!");
+      })
+  }
+
+  const handleGetGrade = () => {
+    let link = document.getElementById("github-link-for-grade").value;
+    console.log(link);
+
+    if (link === '') {
+      alertProperties(true, "info", "Info", "You need to write a link!");
+    } else {
+      let regex = new RegExp("((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)(/)?");
+      if (regex.test(link)) {
+        axios.all([
+          axios.post("http://localhost:8080/compare-multiple/details", {
+            repos: [link, link]
+          }),
+          axios.post("http://localhost:8080/compare-multiple/changes", {
+            repos: [link, link]
+          })
+        ])
+          .then(axios.spread((response1, response2) => {
+            if (response1.data === "Error") {
+              alertProperties(true, "error", "Error", "Some error occured while trying to get details!");
+            } else {
+              console.log(response1.data);
+              if (response2.data === "Error") {
+                alertProperties(true, "error", "Error", "Some error occured while trying to get changes!");
+              } else {
+                console.log(response2.data);
+                let table_data = [];
+                for (let i = 0; i < 1; i++) {
+                  let number_commits = 0;
+                  let number_commits_per_month = 0;
+                  let number_changes = 0;
+                  let number_changes_per_commit = 0;
+                  let number_changes_per_month = 0;
+                  let number_months = 0;
+
+                  for (let j = 0; j < 1; j++) {
+                    if (link === response1.data[j].repo) {
+                      number_commits = response1.data[j].counter;
+                      number_commits_per_month = number_commits / response1.data[j].months_with_commits[0].length;
+                      number_months = response1.data[j].months_with_commits[0].length;
+                    }
+                  }
+
+                  for (let j = 0; j < 1; j++) {
+                    if (link === response2.data[j].repo) {
+                      for (let q = 0; q < response2.data[j].lines_all_commits.length; q++) {
+                        for (let k = 0; k < response2.data[j].lines_all_commits[q].length; k++) {
+                          number_changes += response2.data[j].lines_all_commits[q][k].l;
+                        }
+                      }
+                      number_changes_per_commit = number_changes / response2.data[j].lines_all_commits.length;
+                      number_changes_per_month = number_changes / number_months;
+                    }
+                  }
+                  table_data.push(createData(repos[i], number_commits, parseInt(number_commits_per_month), number_changes, parseInt(number_changes_per_commit), parseInt(number_changes_per_month)));
+                }
+                axios.post("http://localhost:8080/compare-multiple/grades", {
+                  repos: table_data
+                })
+                  .then(res => {
+                    if (res.data === "Error") {
+                      alertProperties(true, "error", "Error", "Some error occured while trying to get grades!");
+                    } else {
+                      console.log(res.data);
+                      setGrade(res.data[0].grade);
+                    }
+                  })
+              }
+            }
+          }));
+      } else {
+        alertProperties(true, "error", "Error", "This is not a valid github link!");
+      }
+    }
+  }
+
+  const LinkInput = styled(InputBase)(({ theme }) => ({
+    'label + &': {
+      marginTop: theme.spacing(3),
+    },
+    input: {
+      color: "white",
+      marginLeft: "4px"
+    },
+    '& .MuiInputBase-input': {
+      borderRadius: 4,
+      position: 'relative',
+      backgroundColor: theme.palette.mode === 'light' ? '#0d1117' : 'white',
+      border: '1px solid #30363d',
+      fontSize: 14,
+      width: '100%',
+      height: '10px',
+      padding: '12px 12px 12px 12px',
+      transition: theme.transitions.create([
+        'border-color',
+        'background-color',
+        'box-shadow',
+      ]),
+      fontFamily: [
+        '-apple-system',
+        'BlinkMacSystemFont',
+        '"Segoe UI"',
+        'Roboto',
+        '"Helvetica Neue"',
+        'Arial',
+        'sans-serif',
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(','),
+      '&:focus': {
+        boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+        borderColor: theme.palette.primary.main,
+      },
+    },
+  }));
 
   return (
     <>
@@ -428,6 +633,12 @@ export default function MyCompare() {
           </div>
         </div>
         <div className='my-compare-container'>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
+              <AlertTitle>{errorTitle}</AlertTitle>
+              {toastMessage}
+            </Alert>
+          </Snackbar>
           <div className='my-compare-container-body'>
             <div className='upload-container'>
               <div className='upload-container-body' style={{ color: "#8b949e" }}>
@@ -493,6 +704,7 @@ export default function MyCompare() {
                                 <TableCell sx={{ color: 'white', border: "1px solid #30363d" }} align="right">{row.changes}</TableCell>
                                 <TableCell sx={{ color: 'white', border: "1px solid #30363d" }} align="right">{row.changes_per_commit}</TableCell>
                                 <TableCell sx={{ color: 'white', border: "1px solid #30363d" }} align="right">{row.changes_per_month}</TableCell>
+                                <TableCell sx={{ color: 'white', border: "1px solid #30363d" }} align="right">{row.grade}</TableCell>
                               </TableRow>
                             );
                           })}
@@ -510,6 +722,27 @@ export default function MyCompare() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                   />
                 </Paper>
+              </div>
+            </div>
+            <div className='retrain-button-container'>
+              <p style={{ color: "#8b949e", marginLeft: '10px', marginTop: '10px' }}>
+                Retrain model with new data:
+              </p>
+              <RetrainButton onClick={handleRetrain}>Retrain</RetrainButton>
+            </div>
+            <div className='get-grades-container'>
+              <p style={{ color: "#8b949e", marginLeft: '10px', marginTop: '10px' }}>
+                Enter a link to get grades:
+              </p>
+              <LinkInput id="github-link-for-grade"></LinkInput>
+              <GetGradeButton onClick={handleGetGrade}>Get Grade</GetGradeButton>
+              <div className='get-grades-container-body' style={{display: 'flex', float: 'right'}}>
+                <p style={{ color: "#8b949e", marginLeft: '30px', marginTop: '10px' }}>
+                  Grade:
+                </p>
+                <p style={{ color: "orange", marginLeft: '10px', marginTop: '10px' }}>
+                  {grade}
+                </p>
               </div>
             </div>
           </div>

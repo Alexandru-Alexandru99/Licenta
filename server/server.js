@@ -32,7 +32,7 @@ app.use('/moss', mossRouter);
 app.use('/android', androidRouter);
 app.use('/compare-multiple', compareMultipleRouter);
 
-const yourscript = exec('sh ./server/init.sh',
+const yourscript = exec('sh ./init.sh',
   (error, stdout, stderr) => {
     if (error !== null) {
       console.log(`exec error: ${error}`);
@@ -54,3 +54,6 @@ app.listen(port, (err) => {
   if (err) return console.log(err);
   console.log(`Server running on port:${port}`)
 })
+
+
+ 

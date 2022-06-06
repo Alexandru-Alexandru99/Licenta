@@ -6,8 +6,10 @@ var router = express.Router();
 var Git = require("nodegit");
 var path = require('path');
 
+const { PythonShell } = require('python-shell');
+
 var fs = require('fs');
-const {promisify} = require('util');
+const { promisify } = require('util');
 const pipeline = promisify(require("stream").pipeline);
 
 var rr = require("recursive-readdir");
@@ -20,7 +22,7 @@ const git = require('simple-git');
 */
 
 const upload = multer({ dest: "uploads/" });
-router.post('/upload', upload.single("file"), async function(req, res, next) {
+router.post('/upload', upload.single("file"), async function (req, res, next) {
     const file = req.file;
     const name = req.body.name;
 
@@ -32,14 +34,14 @@ router.post('/upload', upload.single("file"), async function(req, res, next) {
         for (let i = 0; i < data.length; i++) {
             repos.push(data[i].replace('\r', ''));
         }
-      } catch (err) {
+    } catch (err) {
         console.error(err);
-      }
+    }
     res.json(repos);
 });
 
 /*
-*   get data from all commits
+*   get details
 */
 
 router.post('/details', (req, res) => {
@@ -176,6 +178,10 @@ async function my_get_diff(commit) {
     return lines_added_per_commit;
 }
 
+/*
+*   get changes
+*/
+
 router.post('/changes', (req, res) => {
     console.log("Start get changes...");
     const repos = req.body.repos;
@@ -228,6 +234,79 @@ router.post('/changes', (req, res) => {
         console.log(e);
         res.json("Error");
     });
+});
+
+/*
+*   get grades
+*/
+
+function get_grade(repo) {
+    return new Promise((resolve, reject) => {
+        try {
+            let options = {
+                mode: 'text',
+                pythonOptions: ['-u'],
+                args: [repo['commits'], repo['commits_per_month'], repo['changes'], repo['changes_per_commit'], repo['changes_per_month']]
+            };
+
+            PythonShell.run('model.py', options, function (err, result) {
+                if (err) {
+                    console.log("Error get grade...");
+                    console.error(err);
+                    res.json("Error");
+                }
+                resolve({
+                    reponame: repo['reponame'],
+                    grade: result[0]
+                });
+            });
+
+        } catch (e) {
+            console.log("Error get grade...");
+            console.log(e);
+            res.json("Error");
+        }
+
+    });
+}
+
+router.post('/grades', async (req, res) => {
+    console.log("Start get grades...");
+    const repos = req.body.repos;
+    let grades = [];
+
+    await Promise.all(repos.map(async function (repo) {
+        grades.push(await get_grade(repo));
+    }));
+
+    await Promise.all(repos.map(async function (repo) {
+        grades.map(grade => {
+            if (grade['reponame'] === repo['reponame']) {
+                repo['grade'] = grade['grade'].toString().substring(1, grade['grade'].toString().length - 1);
+            }
+        });
+    }));
+    console.log("End get grades...");
+    res.json(repos);
+});
+
+/*
+*   retrain
+*/
+
+router.post('/retrain', async function (req, res) {
+    console.log("Start get retrain...");
+
+    const data = req.body.data;
+
+    data.forEach(object => {
+        delete object['reponame'];
+    });
+
+    const ObjectsToCsv = require('objects-to-csv');
+    const csv = new ObjectsToCsv(data);
+    await csv.toDisk('./list.csv', { append: true })
+    res.json("Done");
 });
 
 module.exports = router;
