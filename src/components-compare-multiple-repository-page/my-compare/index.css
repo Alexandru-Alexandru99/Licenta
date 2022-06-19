@@ -47,6 +47,12 @@
     border-radius: 10px 10px 10px 10px;
 }
 
+.my-compare-body .my-compare-container .my-compare-container-body .upload-container .create-model-container {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    display: flex;
+}
+
 .my-compare-body .my-compare-container .my-compare-container-body .upload-container .inputfile {
     background-color: #181c24;
     margin-right: 10px;
@@ -93,4 +99,11 @@
     border-radius: 10px 10px 10px 10px;
     margin-top: 30px;
     display: flex;
+}
+
+.my-compare-body .my-compare-container .my-compare-container-body .euclidean-distance-container {
+    background-color: #181c24;
+    border: 1px solid #30363d;
+    border-radius: 10px 10px 10px 10px;
+    margin-top: 30px;
 }

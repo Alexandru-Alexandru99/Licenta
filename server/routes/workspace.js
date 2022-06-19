@@ -279,6 +279,8 @@ router.post('/filecode', (req, res) => {
     const files_code = [];
     let number_of_changes = 0;
     let number_of_errors = 0;
+    let total_lines = 0;
+    let number_commits = 0;
 
     sha_list.sort((a, b) => {
         return b.order - a.order;
@@ -293,7 +295,10 @@ router.post('/filecode', (req, res) => {
                             const entry = await commitHash.getEntry(my_file);
                             const blob = await entry.getBlob();
                             const blob_code = blob.toString();
+                            const number_of_lines = blob_code.split('\n').length;
+                            total_lines = total_lines + number_of_lines;
                             number_of_changes = number_of_changes + 1;
+                            number_commits = number_commits + 1;
                             files_code.push({
                                 order: order,
                                 code: blob_code
@@ -337,7 +342,7 @@ router.post('/filecode', (req, res) => {
                 var original_hash = crypto.createHash('md5').update(original).digest('hex');
                 var modified_hash = crypto.createHash('md5').update(modified).digest('hex');
                 if (original_hash !== modified_hash) {
-                    if (modified.length - original.length >= 100 || original.length - modified.length >= 100) {
+                    if (modified.length - original.length >= number_of_lines/number_commits || original.length - modified.length >= number_of_lines/number_commits) {
                         status = 1;
                     } else {
                         status = 0;

@@ -29,6 +29,11 @@ import InputBase from '@mui/material/InputBase';
 
 import Button from '@mui/material/Button';
 
+import Chart from 'react-apexcharts'
+
+import Popup from "../popup-window/index";
+
+
 const crypto = require('crypto');
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -195,6 +200,11 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function MyCompare() {
+
+  useEffect(() => {
+    window.localStorage.clear();
+  }, [])
+
   const [rows, setRows] = React.useState([]);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('Common_lines');
@@ -206,6 +216,10 @@ export default function MyCompare() {
   const [grade, setGrade] = React.useState('0');
 
   const [repos, setRepos] = React.useState([]);
+
+  const [featuresData, setFeaturesData] = React.useState([]);
+
+  const [mySeries, setMySeries] = React.useState([]);
 
   /*
   *   alert parameters
@@ -377,6 +391,33 @@ export default function MyCompare() {
     },
   }));
 
+  const GetDistanceButton = styled(Button)(({ theme }) => ({
+    textTransform: 'none',
+    fontSize: 14,
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    width: '110px',
+    height: '25px',
+    marginLeft: '10px',
+    marginTop: '10px',
+    lineHeight: 1.5,
+    backgroundColor: 'green',
+    color: "white",
+    '&:hover': {
+      backgroundColor: '#2ea043',
+    },
+  }));
+
   const UploadButton = styled(Button)(({ theme }) => ({
     textTransform: 'none',
     fontSize: 14,
@@ -394,6 +435,33 @@ export default function MyCompare() {
     ].join(','),
     width: '80px',
     height: '36px',
+    lineHeight: 1.5,
+    backgroundColor: '#21262d',
+    border: '0.5px solid #30363d',
+    '&:hover': {
+      border: '0.5px solid white',
+      backgroundColor: '#21262d',
+    },
+  }));
+
+  const CreateModelButton = styled(Button)(({ theme }) => ({
+    textTransform: 'none',
+    fontSize: 14,
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    width: '80px',
+    height: '36px',
+    marginLeft: '10px',
     lineHeight: 1.5,
     backgroundColor: '#21262d',
     border: '0.5px solid #30363d',
@@ -478,8 +546,11 @@ export default function MyCompare() {
               table_data.push(createData(repos[i], number_commits, parseInt(number_commits_per_month), number_changes, parseInt(number_changes_per_commit), parseInt(number_changes_per_month)));
             }
             console.log(table_data);
+            setFeaturesData(table_data);
+            const model_data = localStorage.getItem("user_csv_name") !== null ? localStorage.getItem("user_csv_name") : "list";
             axios.post("http://localhost:8080/compare-multiple/grades", {
-              repos: table_data
+              repos: table_data,
+              model_data: model_data
             })
               .then(res => {
                 if (res.data === "Error") {
@@ -494,8 +565,10 @@ export default function MyCompare() {
   }
 
   const handleRetrain = () => {
+    const model_data = localStorage.getItem("user_csv_name") !== null ? localStorage.getItem("user_csv_name") : "list";
     axios.post("http://localhost:8080/compare-multiple/retrain", {
-      data: rows
+      data: rows,
+      model_data: model_data
     })
       .then(res => {
         alertProperties(true, "success", "Success", "Model retrained!");
@@ -578,6 +651,52 @@ export default function MyCompare() {
     }
   }
 
+  const handleGetDistance = () => {
+
+    const number_of_clusters = document.getElementById("number-of-clusters").value !== '' ? document.getElementById("number-of-clusters").value : 4;
+
+    axios.post("http://localhost:8080/compare-multiple/distances", {
+      data: featuresData,
+      clusters: number_of_clusters
+    })
+      .then(res => {
+        if (res.data === "Error") {
+          alertProperties(true, "error", "Error", "Some error occured while trying to get grades!");
+        } else {
+          console.log(res.data);
+          let clusters = [];
+
+          let chart_data = [];
+
+          for (let i = 0; i < res.data.length; i++) {
+            clusters.push(res.data[i].cluster);
+          }
+
+          clusters = [...new Set(clusters)];
+
+          console.log(clusters);
+
+          for (let i = 0; i < clusters.length; i++) {
+            let cluster_data = [];
+            for (let j = 0; j < res.data.length; j++) {
+              if (res.data[j].cluster === clusters[i]) {
+                cluster_data.push([res.data[j].commits, res.data[j].changes, res.data[j].reponame]);
+              }
+            }
+            chart_data.push({
+              name: clusters[i] + 1,
+              data: cluster_data
+            })
+          }
+
+          console.log(chart_data);
+
+          setMySeries(chart_data);
+        }
+      })
+  }
+
+
   const LinkInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
       marginTop: theme.spacing(3),
@@ -619,6 +738,76 @@ export default function MyCompare() {
     },
   }));
 
+  const NumberOfClustersInput = styled(InputBase)(({ theme }) => ({
+    'label + &': {
+      marginTop: theme.spacing(3),
+    },
+    input: {
+      color: "white",
+      marginLeft: "4px"
+    },
+    '& .MuiInputBase-input': {
+      borderRadius: 4,
+      position: 'relative',
+      backgroundColor: theme.palette.mode === 'light' ? '#0d1117' : 'white',
+      border: '1px solid #30363d',
+      fontSize: 14,
+      width: '100%',
+      height: '10px',
+      padding: '12px 12px 12px 12px',
+      transition: theme.transitions.create([
+        'border-color',
+        'background-color',
+        'box-shadow',
+      ]),
+      fontFamily: [
+        '-apple-system',
+        'BlinkMacSystemFont',
+        '"Segoe UI"',
+        'Roboto',
+        '"Helvetica Neue"',
+        'Arial',
+        'sans-serif',
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(','),
+      '&:focus': {
+        boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+        borderColor: theme.palette.primary.main,
+      },
+    },
+  }));
+
+  const options = {
+    chart: {
+      height: 350,
+      type: 'scatter',
+      zoom: {
+        enabled: true,
+        type: 'xy'
+      }
+    },
+    xaxis: {
+      tickAmount: 10,
+      labels: {
+        formatter: function (val) {
+          return parseFloat(val).toFixed(1)
+        }
+      }
+    },
+    yaxis: {
+      tickAmount: 7
+    }
+  }
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const togglePopupChange = () => {
+    setIsOpen(!isOpen);
+  }
+
+
   return (
     <>
       <div className='my-compare-body'>
@@ -651,6 +840,12 @@ export default function MyCompare() {
                 </UploadButton>
                 <GetDataButton onClick={handleGetData}>Get Data</GetDataButton>
               </div>
+              <div className='create-model-container'>
+                <p style={{ color: "#8b949e" }}>
+                  Create your model using data generate by your parameters and calculate grade using your formula:
+                </p>
+                <CreateModelButton style={{ color: "#8b949e" }} onClick={togglePopupChange}>Create</CreateModelButton>
+              </div>
             </div>
             <div className='result-container'>
               <div className='result-container-body'>
@@ -671,6 +866,10 @@ export default function MyCompare() {
                         rowCount={rows.length}
                       />
                       <TableBody>
+                        {isOpen && <Popup
+                          title="{title}"
+                          handleClose={togglePopupChange}
+                        />}
                         {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
                         {stableSort(rows, getComparator(order, orderBy))
@@ -736,7 +935,7 @@ export default function MyCompare() {
               </p>
               <LinkInput id="github-link-for-grade"></LinkInput>
               <GetGradeButton onClick={handleGetGrade}>Get Grade</GetGradeButton>
-              <div className='get-grades-container-body' style={{display: 'flex', float: 'right'}}>
+              <div className='get-grades-container-body' style={{ display: 'flex', float: 'right' }}>
                 <p style={{ color: "#8b949e", marginLeft: '30px', marginTop: '10px' }}>
                   Grade:
                 </p>
@@ -744,6 +943,14 @@ export default function MyCompare() {
                   {grade}
                 </p>
               </div>
+            </div>
+            <div className='euclidean-distance-container'>
+              <GetDistanceButton onClick={handleGetDistance}>Get Distance</GetDistanceButton>
+              <div className='clusters-container' style={{ display:'flex', marginLeft:'10px', marginTop:'10px'}}>
+                <p style={{ color: "#8b949e", marginTop:'10px', marginRight:'5px' }}>Number of clusters:</p>
+                <NumberOfClustersInput id="number-of-clusters"></NumberOfClustersInput>
+              </div>
+              <Chart options={options} series={mySeries} type="scatter" height={350} />
             </div>
           </div>
         </div>

@@ -5,7 +5,14 @@ from sklearn.linear_model import LinearRegression
 import random
 import sys
 
-data = pd.read_csv('list.csv')
+commits = sys.argv[1]
+commits_per_month = sys.argv[2]
+changes = sys.argv[3]
+changes_per_commit = sys.argv[4]
+changes_per_month = sys.argv[5]
+csv_name = sys.argv[6]
+
+data = pd.read_csv('data/' + csv_name + ".csv")
 
 train_frame, test_frame = train_test_split(data, test_size=0.2, random_state=42)
 
@@ -21,11 +28,6 @@ train_frame.drop('grade',axis='columns',inplace=True)
 # changes_per_commit = (int)(changes / commits)
 # changes_per_month = (int)(changes / 6)
 
-commits = sys.argv[1]
-commits_per_month = sys.argv[2]
-changes = sys.argv[3]
-changes_per_commit = sys.argv[4]
-changes_per_month = sys.argv[5]
 
 lst = [[commits, commits_per_month, changes, changes_per_commit, changes_per_month]]
   

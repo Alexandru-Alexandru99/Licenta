@@ -449,9 +449,9 @@ export default function MyEditor({ totalSize, sizeLanguage, languagesChart, play
                             alertProperties(true, "error", "Error", "Error on code running!");
                             setOutputRun("Error...");
                         } else {
-                            let output = "== 1 == error: " + response.data.error + "\n" + " == 2 == stderr: " +
-                                response.data.stderr + "\n" + " == 3 == stdout: " + response.data.stdout + "\n";
-                            setOutputRun(output);
+                            // let output = "== 1 == error: " + response.data.error + "\n" + " == 2 == stderr: " +
+                            //     response.data.stderr + "\n" + " == 3 == stdout: " + response.data.stdout + "\n";
+                            setOutputRun(response.data);
                         }
                     });
             } else {
@@ -467,9 +467,9 @@ export default function MyEditor({ totalSize, sizeLanguage, languagesChart, play
                                 alertProperties(true, "error", "Error", "Error on code running!");
                                 setOutputRun("Error...");
                             } else {
-                                let output = "== 1 == error: " + response.data.error + "\n" + " == 2 == stderr: " +
-                                    response.data.stderr + "\n" + " == 3 == stdout: " + response.data.stdout + "\n";
-                                setOutputRun(output);
+                                // let output = "== 1 == error: " + response.data.error + "\n" + " == 2 == stderr: " +
+                                //     response.data.stderr + "\n" + " == 3 == stdout: " + response.data.stdout + "\n";
+                                setOutputRun(response.data);
                             }
                         });
                 } else {
@@ -487,7 +487,7 @@ export default function MyEditor({ totalSize, sizeLanguage, languagesChart, play
             if (extension === 'c' || extension === 'cpp') {
                 if (typeof editorRef.current === "string") {
                     setOutputCheckSecurity("Checking...");
-                    axios.post("http://20.113.30.16:3000/security", {
+                    axios.post("http://20.113.166.97:3000/security", {
                         code: editorRef.current,
                         language: language,
                         extension: '.' + extension
@@ -503,7 +503,7 @@ export default function MyEditor({ totalSize, sizeLanguage, languagesChart, play
                 } else {
                     if (currentDivEditor >= 1) {
                         setOutputCheckSecurity("Checking...");
-                        axios.post("http://20.113.30.16:3000/security", {
+                        axios.post("http://20.113.166.97:3000/security", {
                             code: commitsCode[0].codes[currentDivEditor - 1].code,
                             language: language,
                             extension: '.' + extension

@@ -43,8 +43,7 @@ router.post('/run', (req, res) => {
                 console.error(err);
                 res.json("Error");
             }
-            let parsed = result.toString().substring(2, result.toString().length - 1);
-            res.send(JSON.parse(parsed));
+            res.send(result.toString());
         });
 
     } catch (e) {

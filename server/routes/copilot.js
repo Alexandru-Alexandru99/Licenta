@@ -26,20 +26,22 @@ router.post('/explain', (req, res) => {
     console.log("Start get code explanation...");
 
     const code = req.body.code;
+    const tokens = req.body.tokens;
 
     let promise = new Promise(async function (resolve, reject) {
         const response = await openai.createCompletion("text-davinci-002", {
             prompt: code,
             temperature: 0,
-            max_tokens: 64,
+            max_tokens: tokens,
             top_p: 1.0,
             frequency_penalty: 0.0,
             presence_penalty: 0.0,
             stop: ["\"\"\""],
         });
-        resolve([response]);
+        resolve([response.data]);
     }).catch(function (e) {
-        console.log("Error get code explanation...");
+        console.log(e);
+        console.log("Error get code explanation on openai...");
         res.json("Error");
     });
 
@@ -49,6 +51,7 @@ router.post('/explain', (req, res) => {
 
         console.log("Done get code explanation...");
     }).catch(function (e) {
+        console.log(e);
         console.log("Error get code explanation...");
         res.json("Error");
     });

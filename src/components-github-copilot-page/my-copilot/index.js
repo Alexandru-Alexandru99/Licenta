@@ -83,6 +83,12 @@ export default function MyCopilot() {
 
     const [defaultCode, setDefaultCode] = useState('');
 
+    const [previousCode, setPreviousCode] = useState('');
+
+    const [myTokens, setMyTokens] = useState(128);
+
+    const [myModels, setMyModels] = useState(['text-ada-001','text-babbage-001','text-curie-001','text-davinci-002']);
+
     /*
     *   alert parameters
     */
@@ -275,20 +281,47 @@ export default function MyCopilot() {
                     });
             }
             if (optionSelected === 'explain') {
-                axios.post("http://localhost:8080/copilot/explain", {
-                    code: editorRef.current
-                })
-                    .then((response) => {
-                        if (response.data !== "Error") {
-                            if (response.data.choices[0].text === '') {
-                                setOutput("Error on writing code...");
+                if (editorRef.current === previousCode) {
+                    setMyTokens(myTokens * 2);
+                    if (myTokens < 2048) {
+                        axios.post("http://localhost:8080/copilot/explain", {
+                            code: editorRef.current,
+                            tokens: myTokens
+                        })
+                            .then((response) => {
+                                if (response.data !== "Error") {
+                                    if (response.data.choices[0].text === '') {
+                                        setOutput("Error on writing code...");
+                                    } else {
+                                        setPreviousCode(editorRef.current);
+                                        setOutput(response.data.choices[0].text);
+                                    }
+                                } else {
+                                    setOutput("Error on server...");
+                                }
+                            });
+                    } else {
+                        setOutput("You have reached the limit of tokens...");
+                    }
+                } else {
+                    setMyTokens(64);
+                    axios.post("http://localhost:8080/copilot/explain", {
+                        code: editorRef.current,
+                        tokens: 64
+                    })
+                        .then((response) => {
+                            if (response.data !== "Error") {
+                                if (response.data.choices[0].text === '') {
+                                    setOutput("Error on writing code...");
+                                } else {
+                                    setPreviousCode(editorRef.current);
+                                    setOutput(response.data.choices[0].text);
+                                }
                             } else {
-                                setOutput(response.data.choices[0].text);
+                                setOutput("Error on server...");
                             }
-                        } else {
-                            setOutput("Error on server...");
-                        }
-                    });
+                        });
+                }
             }
             if (optionSelected === 'natural') {
                 axios.post("http://localhost:8080/copilot/naturallanguage", {

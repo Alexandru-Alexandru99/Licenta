@@ -265,6 +265,7 @@ router.post('/percentageofsamenumberoflines', (req, res) => {
             })
     }).catch(function (e) {
         console.log("Error get lines between files at specific commit...");
+        console.log(e);
         res.json("Error");
     });
 

@@ -53,6 +53,8 @@ router.post('/details', (req, res) => {
 
     let details_per_repo = [];
 
+    console.log(repos);
+
     let promise = new Promise(async function (resolve, reject) {
         let count = 0;
         await Promise.all(
@@ -230,7 +232,7 @@ router.post('/changes', (req, res) => {
         res.json(result[0]);
 
     }).catch(function (e) {
-        console.lo("Error get changes...");
+        console.log("Error get changes...");
         console.log(e);
         res.json("Error");
     });
@@ -240,13 +242,13 @@ router.post('/changes', (req, res) => {
 *   get grades
 */
 
-function get_grade(repo) {
+function get_grade(repo, model_data) {
     return new Promise((resolve, reject) => {
         try {
             let options = {
                 mode: 'text',
                 pythonOptions: ['-u'],
-                args: [repo['commits'], repo['commits_per_month'], repo['changes'], repo['changes_per_commit'], repo['changes_per_month']]
+                args: [repo['commits'], repo['commits_per_month'], repo['changes'], repo['changes_per_commit'], repo['changes_per_month'], model_data]
             };
 
             PythonShell.run('model.py', options, function (err, result) {
@@ -273,10 +275,11 @@ function get_grade(repo) {
 router.post('/grades', async (req, res) => {
     console.log("Start get grades...");
     const repos = req.body.repos;
+    const model_data = req.body.model_data;
     let grades = [];
 
     await Promise.all(repos.map(async function (repo) {
-        grades.push(await get_grade(repo));
+        grades.push(await get_grade(repo, model_data));
     }));
 
     await Promise.all(repos.map(async function (repo) {
@@ -298,6 +301,7 @@ router.post('/retrain', async function (req, res) {
     console.log("Start get retrain...");
 
     const data = req.body.data;
+    const model_data = req.body.model_data;
 
     data.forEach(object => {
         delete object['reponame'];
@@ -305,8 +309,184 @@ router.post('/retrain', async function (req, res) {
 
     const ObjectsToCsv = require('objects-to-csv');
     const csv = new ObjectsToCsv(data);
-    await csv.toDisk('./list.csv', { append: true })
+    await csv.toDisk('data/' + model_data + ".csv", { append: true })
     res.json("Done");
 });
+
+/*
+*   euclidean distance
+*/
+
+function get_euclidean_distance(target_repo, repos) {
+    return new Promise((resolve, reject) => {
+        try {
+
+            const str = repos.map(a => `(${Object.values(a)})`).join(", ")
+            let options = {
+                mode: 'text',
+                pythonOptions: ['-u'],
+                args: [target_repo['commits'], target_repo['commits_per_month'], target_repo['changes'], target_repo['changes_per_commit'], target_repo['changes_per_month'], target_repo['reponame'], str]
+            };
+
+
+            PythonShell.run('distance_between_vectors.py', options, function (err, result) {
+                if (err) {
+                    console.log("Error get euclidean distance...");
+                    console.log(err);
+                    resolve("Error");
+                }
+                buffer = result[0].replace('[', '');
+                buffer = buffer.replace(' ', '');
+                buffer = buffer.replace(']', '');
+                buffer = buffer.split(",");
+                numberArray = [];
+                for (var i = 0; i < buffer.length; i++)
+                    numberArray.push(parseFloat(buffer[i]));
+                resolve({
+                    reponame: target_repo['reponame'],
+                    distance: numberArray
+                });
+            });
+
+        } catch (e) {
+            console.log("Error get euclidean distance...");
+            console.log(e);
+            resolve("Error");
+        }
+
+    });
+}
+
+function apply_kmeans(matrix, lines, clusters) {
+    return new Promise((resolve, reject) => {
+        try {
+
+            let options = {
+                mode: 'text',
+                pythonOptions: ['-u'],
+                args: [matrix, lines, clusters]
+            };
+
+
+            PythonShell.run('find_clusters.py', options, function (err, result) {
+                if (err) {
+                    console.log("Error get euclidean distance...");
+                    console.log(err);
+                    resolve("Error");
+                }
+                buffer = result[0].replace('[', '');
+                buffer = buffer.replace(']', '');
+                buffer = buffer.split(' ');
+                numberArray = [];
+                for (var i = 0; i < buffer.length; i++)
+                    numberArray.push(parseInt(buffer[i]));
+                console.log(numberArray);
+                resolve(numberArray);
+            });
+
+        } catch (e) {
+            console.log("Error get euclidean distance...");
+            console.log(e);
+            resolve("Error");
+        }
+
+    });
+}
+
+router.post('/distances', async function (req, res) {
+    console.log("Start get euclidean distances...");
+
+    const data = req.body.data;
+
+    const clusters = req.body.clusters;
+
+    if (clusters <= data.length) {
+        let distances = [];
+
+        await Promise.all(data.map(async function (repo) {
+            distances.push(await get_euclidean_distance(repo, data));
+        }));
+
+        console.log(distances);
+        matrix = [];
+
+        for (var i = 0; i < data.length; i++) {
+            matrix.push(distances[i]['distance']);
+        }
+
+        console.log(matrix);
+
+        const response = await apply_kmeans(matrix, data.length, clusters);
+
+        console.log(response);
+
+        let contor = 0;
+        await Promise.all(data.map(function (repo) {
+            distances.map(distance => {
+                if (distance['reponame'] === repo['reponame']) {
+                    repo['distance'] = distance['distance'];
+                    repo['cluster'] = response[contor];
+                    contor = contor + 1;
+                }
+            });
+        }));
+        console.log("End get euclidean distances...");
+        res.json(data);
+    } else {
+        console.log("Error get euclidean distances...");
+        res.json("Error");
+    }
+})
+
+/*
+*   generate data your data and model
+*/
+
+function generate_data(csv_name, number_of_data, commits_interval_min, commits_interval_max, number_of_months, changes_interval_min, changes_interval_max, max_grade_for_x_number_of_commits, max_grade_for_x_number_of_changes_per_commit) {
+    return new Promise((resolve, reject) => {
+        try {
+            let options = {
+                mode: 'text',
+                pythonOptions: ['-u'],
+                args: [csv_name, number_of_data, commits_interval_min, commits_interval_max, number_of_months, changes_interval_min, changes_interval_max, max_grade_for_x_number_of_commits, max_grade_for_x_number_of_changes_per_commit]
+            };
+
+
+            PythonShell.run('generate_data_with_parameters.py', options, function (err, result) {
+                if (err) {
+                    console.log("Error create your model...");
+                    console.log(err);
+                    resolve("Error");
+                }
+                resolve(result[0]);
+            });
+
+        } catch (e) {
+            console.log("Error create your model...");
+            console.log(e);
+            resolve("Error");
+        }
+    });
+}
+
+router.post('/create', async function (req, res) {
+    console.log("Start create your model..");
+
+    const csv_name = req.body.csv_name;
+    const number_of_data = req.body.number_of_data;
+    const commits_interval_min = req.body.commits_interval_min;
+    const commits_interval_max = req.body.commits_interval_max;
+    const number_of_months = req.body.number_of_months;
+    const changes_interval_min = req.body.changes_interval_min;
+    const changes_interval_max = req.body.changes_interval_max;
+    const max_grade_for_x_number_of_commits = req.body.max_grade_for_x_number_of_commits;
+    const max_grade_for_x_number_of_changes_per_commit = req.body.max_grade_for_x_number_of_changes_per_commit;
+
+    const response = await generate_data(csv_name, number_of_data, commits_interval_min, commits_interval_max, number_of_months, changes_interval_min, changes_interval_max, max_grade_for_x_number_of_commits, max_grade_for_x_number_of_changes_per_commit);
+
+
+    console.log("End create your model...");
+    res.json(response);
+})
 
 module.exports = router;

@@ -31,7 +31,7 @@ if (image == "c"):
 data = '{\"image\": \"glot/' + image + ':latest\", \"payload\": {\"language\": \"' + language + '\", \"files\": [{\"name\": \"main.' + ext + '\", \"content\":'
 data = data + "\"" + contents + "\"}]}}"
 
-response = requests.post('http://20.113.87.37:8088/run', headers=headers, data=data)
+response = requests.post('http://20.218.70.5:8088/run', headers=headers, data=data)
 
 #*  get response
 

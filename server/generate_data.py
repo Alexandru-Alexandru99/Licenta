@@ -12,11 +12,14 @@ def max_value_of_an_attribute(data, attribute):
 data = []
 
 for i in range(20000):
-    commits = random.randint(1,100)
-    commits_per_month = (int)(commits/6)
-    changes = random.randint(100,3000)
+    commits = random.randint(10,50)
+    commits_per_month = (int)(commits / 5)
+    aux = random.randint(100,5000)
+    while(aux / (commits * 10) > 10):
+        aux = random.randint(100,5000)
+    changes = aux
     changes_per_commit = (int)(changes / commits)
-    changes_per_month = (int)(changes / 6)
+    changes_per_month = (int)(changes / 5)
 
     data.append({
         'commits': commits, 
@@ -33,12 +36,12 @@ max_changes_per_commit = max_value_of_an_attribute(data, 'changes_per_commit')
 max_changes_per_month = max_value_of_an_attribute(data, 'changes_per_month')
 
 for item in data:
-    grade_1 = (item['commits'] / max_commits) * 10
-    grade_2 = (item['commits_per_month'] / max_commits_per_month) * 10
-    grade_3 = (item['changes'] / max_changes) * 10
-    grade_4 = (item['changes_per_commit'] / max_changes_per_commit) * 10
-    grade_5 = (item['changes_per_month'] / max_changes_per_month) * 10
+    grade_1 = (item['commits'] * 10) / 50
+    grade_2 = (item['commits_per_month'] * 10 * 100) / (20 * item['commits']) 
+    grade_3 = item['changes'] / (item['commits'] * 10)
+    grade_4 = (item['changes_per_commit'] * 10) / 100
+    grade_5 = (item['changes_per_month'] * 10 * 100) / (20 * item['changes']) 
     item['grade'] = round((grade_1 + grade_2 + grade_3 + grade_4 + grade_5)/5, 2)
 
 df = pd.DataFrame(data)
-df.to_csv('list.csv', index=False)
+df.to_csv('data/list.csv', index=False)
