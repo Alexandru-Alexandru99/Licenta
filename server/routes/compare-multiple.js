@@ -255,18 +255,19 @@ function get_grade(repo, model_data) {
                 if (err) {
                     console.log("Error get grade...");
                     console.error(err);
-                    res.json("Error");
+                    resolve("Error");
+                } else {
+                    resolve({
+                        reponame: repo['reponame'],
+                        grade: result[0]
+                    });
                 }
-                resolve({
-                    reponame: repo['reponame'],
-                    grade: result[0]
-                });
             });
 
         } catch (e) {
             console.log("Error get grade...");
             console.log(e);
-            res.json("Error");
+            resolve("Error");
         }
 
     });

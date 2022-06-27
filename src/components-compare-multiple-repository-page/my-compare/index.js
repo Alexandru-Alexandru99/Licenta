@@ -221,6 +221,8 @@ export default function MyCompare() {
 
   const [mySeries, setMySeries] = React.useState([]);
 
+  const [clickUpload, setClickUpload] = React.useState(false);
+
   /*
   *   alert parameters
   */
@@ -485,6 +487,7 @@ export default function MyCompare() {
     axios.post("http://localhost:8080/compare-multiple/upload", data)
       .then(res => {
         console.log(res);
+        setClickUpload(true);
         setRepos(res.data);
       })
       .catch(err => {
@@ -497,82 +500,90 @@ export default function MyCompare() {
   }
 
   const handleGetData = () => {
-    console.log(repos);
-    axios.all([
-      axios.post("http://localhost:8080/compare-multiple/details", {
-        repos: repos
-      }),
-      axios.post("http://localhost:8080/compare-multiple/changes", {
-        repos: repos
-      })
-    ])
-      .then(axios.spread((response1, response2) => {
-        if (response1.data === "Error") {
-          alertProperties(true, "error", "Error", "Some error occured while trying to get details!");
-        } else {
-          console.log(response1.data);
-          if (response2.data === "Error") {
-            alertProperties(true, "error", "Error", "Some error occured while trying to get changes!");
+    if (clickUpload === true) {
+      console.log(repos);
+      axios.all([
+        axios.post("http://localhost:8080/compare-multiple/details", {
+          repos: repos
+        }),
+        axios.post("http://localhost:8080/compare-multiple/changes", {
+          repos: repos
+        })
+      ])
+        .then(axios.spread((response1, response2) => {
+          if (response1.data === "Error") {
+            alertProperties(true, "error", "Error", "Some error occured while trying to get details!");
           } else {
-            console.log(response2.data);
-            let table_data = [];
-            for (let i = 0; i < repos.length; i++) {
-              let number_commits = 0;
-              let number_commits_per_month = 0;
-              let number_changes = 0;
-              let number_changes_per_commit = 0;
-              let number_changes_per_month = 0;
-              let number_months = 0;
+            console.log(response1.data);
+            if (response2.data === "Error") {
+              alertProperties(true, "error", "Error", "Some error occured while trying to get changes!");
+            } else {
+              console.log(response2.data);
+              let table_data = [];
+              for (let i = 0; i < repos.length; i++) {
+                let number_commits = 0;
+                let number_commits_per_month = 0;
+                let number_changes = 0;
+                let number_changes_per_commit = 0;
+                let number_changes_per_month = 0;
+                let number_months = 0;
 
-              for (let j = 0; j < response1.data.length; j++) {
-                if (repos[i] === response1.data[j].repo) {
-                  number_commits = response1.data[j].counter;
-                  number_commits_per_month = number_commits / response1.data[j].months_with_commits[0].length;
-                  number_months = response1.data[j].months_with_commits[0].length;
-                }
-              }
-
-              for (let j = 0; j < response2.data.length; j++) {
-                if (repos[i] === response2.data[j].repo) {
-                  for (let q = 0; q < response2.data[j].lines_all_commits.length; q++) {
-                    for (let k = 0; k < response2.data[j].lines_all_commits[q].length; k++) {
-                      number_changes += response2.data[j].lines_all_commits[q][k].l;
-                    }
+                for (let j = 0; j < response1.data.length; j++) {
+                  if (repos[i] === response1.data[j].repo) {
+                    number_commits = response1.data[j].counter;
+                    number_commits_per_month = number_commits / response1.data[j].months_with_commits[0].length;
+                    number_months = response1.data[j].months_with_commits[0].length;
                   }
-                  number_changes_per_commit = number_changes / response2.data[j].lines_all_commits.length;
-                  number_changes_per_month = number_changes / number_months;
                 }
+
+                for (let j = 0; j < response2.data.length; j++) {
+                  if (repos[i] === response2.data[j].repo) {
+                    for (let q = 0; q < response2.data[j].lines_all_commits.length; q++) {
+                      for (let k = 0; k < response2.data[j].lines_all_commits[q].length; k++) {
+                        number_changes += response2.data[j].lines_all_commits[q][k].l;
+                      }
+                    }
+                    number_changes_per_commit = number_changes / response2.data[j].lines_all_commits.length;
+                    number_changes_per_month = number_changes / number_months;
+                  }
+                }
+                table_data.push(createData(repos[i], number_commits, parseInt(number_commits_per_month), number_changes, parseInt(number_changes_per_commit), parseInt(number_changes_per_month)));
               }
-              table_data.push(createData(repos[i], number_commits, parseInt(number_commits_per_month), number_changes, parseInt(number_changes_per_commit), parseInt(number_changes_per_month)));
-            }
-            console.log(table_data);
-            setFeaturesData(table_data);
-            const model_data = localStorage.getItem("user_csv_name") !== null ? localStorage.getItem("user_csv_name") : "list";
-            axios.post("http://localhost:8080/compare-multiple/grades", {
-              repos: table_data,
-              model_data: model_data
-            })
-              .then(res => {
-                if (res.data === "Error") {
-                  alertProperties(true, "error", "Error", "Some error occured while trying to get grades!");
-                } else {
-                  setRows(res.data);
-                }
+              console.log(table_data);
+              setFeaturesData(table_data);
+              const model_data = localStorage.getItem("user_csv_name") !== null ? localStorage.getItem("user_csv_name") : "list";
+              axios.post("http://localhost:8080/compare-multiple/grades", {
+                repos: table_data,
+                model_data: model_data
               })
+                .then(res => {
+                  if (res.data === "Error") {
+                    alertProperties(true, "error", "Error", "Some error occured while trying to get grades!");
+                  } else {
+                    setRows(res.data);
+                  }
+                })
+            }
           }
-        }
-      }));
+        }));
+    } else {
+      alertProperties(true, "error", "Error", "You must upload a file before getting data!");
+    }
   }
 
   const handleRetrain = () => {
-    const model_data = localStorage.getItem("user_csv_name") !== null ? localStorage.getItem("user_csv_name") : "list";
-    axios.post("http://localhost:8080/compare-multiple/retrain", {
-      data: rows,
-      model_data: model_data
-    })
-      .then(res => {
-        alertProperties(true, "success", "Success", "Model retrained!");
+    if (clickUpload === true) {
+      const model_data = localStorage.getItem("user_csv_name") !== null ? localStorage.getItem("user_csv_name") : "list";
+      axios.post("http://localhost:8080/compare-multiple/retrain", {
+        data: rows,
+        model_data: model_data
       })
+        .then(res => {
+          alertProperties(true, "success", "Success", "Model retrained!");
+        })
+    } else {
+      alertProperties(true, "error", "Error", "You must upload a file and get data before retrain!");
+    }
   }
 
   const handleGetGrade = () => {
@@ -631,8 +642,11 @@ export default function MyCompare() {
                   }
                   table_data.push(createData(repos[i], number_commits, parseInt(number_commits_per_month), number_changes, parseInt(number_changes_per_commit), parseInt(number_changes_per_month)));
                 }
+                const model_data = localStorage.getItem("user_csv_name") !== null ? localStorage.getItem("user_csv_name") : "list";
+
                 axios.post("http://localhost:8080/compare-multiple/grades", {
-                  repos: table_data
+                  repos: table_data,
+                  model_data: model_data
                 })
                   .then(res => {
                     if (res.data === "Error") {
@@ -946,8 +960,8 @@ export default function MyCompare() {
             </div>
             <div className='euclidean-distance-container'>
               <GetDistanceButton onClick={handleGetDistance}>Get Distance</GetDistanceButton>
-              <div className='clusters-container' style={{ display:'flex', marginLeft:'10px', marginTop:'10px'}}>
-                <p style={{ color: "#8b949e", marginTop:'10px', marginRight:'5px' }}>Number of clusters:</p>
+              <div className='clusters-container' style={{ display: 'flex', marginLeft: '10px', marginTop: '10px' }}>
+                <p style={{ color: "#8b949e", marginTop: '10px', marginRight: '5px' }}>Number of clusters:</p>
                 <NumberOfClustersInput id="number-of-clusters"></NumberOfClustersInput>
               </div>
               <Chart options={options} series={mySeries} type="scatter" height={350} />

@@ -15,3 +15,4 @@ function create_dir() {
 create_dir ./repos
 create_dir ./code
 create_dir ./logs
+create_dir ./uploads

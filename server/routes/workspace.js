@@ -318,6 +318,7 @@ router.post('/filecode', (req, res) => {
             })
     }).catch(function (e) {
         console.log("Error get file code...");
+        console.log(e);
         res.json("Error");
     });
 
@@ -342,7 +343,7 @@ router.post('/filecode', (req, res) => {
                 var original_hash = crypto.createHash('md5').update(original).digest('hex');
                 var modified_hash = crypto.createHash('md5').update(modified).digest('hex');
                 if (original_hash !== modified_hash) {
-                    if (modified.length - original.length >= number_of_lines/number_commits || original.length - modified.length >= number_of_lines/number_commits) {
+                    if ((modified.length - original.length >= total_lines/number_commits) || (original.length - modified.length >= total_lines/number_commits)) {
                         status = 1;
                     } else {
                         status = 0;
@@ -366,6 +367,7 @@ router.post('/filecode', (req, res) => {
 
     }).catch(function (e) {
         console.log("Error get file code...");
+        console.log(e);
         res.json("Error");
     });
 });
